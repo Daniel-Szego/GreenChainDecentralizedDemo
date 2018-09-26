@@ -12,52 +12,24 @@ const namespace = "org.supplychain.green.model";
 async function InitTestDataFunction(param) {  
     console.log('init test data');
 
-    console.log('Creating a user');  
+    console.log('Creating a manufacturer company');  
     const factory = getFactory(); 
 	
-  	// adding user 
-    const userParticipantRegistry = await getParticipantRegistry(namespace + '.User');   
-    const newUser = await factory.newResource(namespace, 'User', "1");
-    newUser.UserName = "Chuck Norris";
-    newUser.AccountBalance = 100;
-    const newAddress = await factory.newConcept(namespace, 'Address');
-	newAddress.Country = "Hungary";
-	newAddress.City = "Budapest";
-	newAddress.Street = "Seasam Street";
-    newAddress.HauseNumber = 16;
-  	newUser.UserAddress = newAddress;
+  	// adding company 
+    const manCompReg = await getParticipantRegistry(namespace + '.ManufacturerCompany');   
+    const manComp = await factory.newResource(namespace, 'ManufacturerCompany', "1");
+    manComp.companyName = "CREATED";
+    manComp.GHG = 100;
+    const newAddress = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress.country = "Bejing";
+	newAddress.city = "China";
+	newAddress.street = "Xia mo Street";
+    newAddress.hauseNr = 16;
+  	manComp.companyAddress = newAddress;
   
-    await userParticipantRegistry.add(newUser);     
-  
-  	// adding asset owner
-    const assetParticipantRegistry = await getParticipantRegistry(namespace + '.AssetOwner');   
-    const bycicleOwner = await factory.newResource(namespace, 'AssetOwner', "2");
-    bycicleOwner.OwnerName = "James Bond";
-    bycicleOwner.AccountBalance = 200;
-    const newAddress2 = await factory.newConcept(namespace, 'Address');
-	newAddress2.Country = "Germany";
-	newAddress2.City = "Frankfurt";
-	newAddress2.Street = "Seasam Street";
-    newAddress2.HauseNumber = 22;
-  	bycicleOwner.OwnerAddress = newAddress2;
-  
-    await assetParticipantRegistry.add(bycicleOwner);     
-
-    console.log('Creating bycicle');  
-    const bycicleAssetRegistry = await getAssetRegistry(namespace + '.Bycicle');   
-    const newBycicle = await factory.newResource(namespace, 'Bycicle', "1");
-	newBycicle.ObjectName = "MyFirstBycicle";
-    newBycicle.Owner = bycicleOwner;
-    await bycicleAssetRegistry.add(newBycicle);    
-  
-    console.log('Creating a bike');  
-    const bikeAssetRegistry = await getAssetRegistry(namespace + '.Bike');   
-    const newBike = await factory.newResource(namespace, 'Bike', "1");
-	newBike.ObjectName = "MyFirstBike";
-    newBike.Owner = bycicleOwner;
-    await bikeAssetRegistry.add(newBike);   
-  
+    await manCompReg.add(manComp);       
 }
+
 
 /**
  *

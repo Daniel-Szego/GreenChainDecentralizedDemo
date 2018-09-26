@@ -60,7 +60,7 @@ concept CompanyAddress {
   o String country
   o String city optional
   o String street optional
-  o String hauseNr optional
+  o Integer hauseNr optional
 }
 
 abstract participant GHGproducerCompany identified by participantId {

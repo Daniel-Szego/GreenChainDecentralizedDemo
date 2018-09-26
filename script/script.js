@@ -15,21 +15,74 @@ async function InitTestDataFunction(param) {
     console.log('Creating a manufacturer company');  
     const factory = getFactory(); 
 	
-  	// adding company 
+  	// adding manufacturer company 
     const manCompReg = await getParticipantRegistry(namespace + '.ManufacturerCompany');   
     const manComp = await factory.newResource(namespace, 'ManufacturerCompany', "1");
-    manComp.companyName = "CREATED";
+    manComp.companyName = "Cell phone Manufacturer Inc.";
     manComp.GHG = 100;
     const newAddress = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress.country = "Bejing";
 	newAddress.city = "China";
-	newAddress.street = "Xia mo Street";
+	newAddress.street = "Xia Mo Street";
     newAddress.hauseNr = 16;
   	manComp.companyAddress = newAddress;
   
     await manCompReg.add(manComp);       
-}
 
+  	// adding transportation company 1
+    const transCompReg = await getParticipantRegistry(namespace + '.TransportationCompany');   
+    const transComp1 = await factory.newResource(namespace, 'TransportationCompany', "2");
+    transComp1.companyName = "Truck Transport Inc.";
+    transComp1.GHG = 50;
+    const newAddress2 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress2.country = "Hong Kong";
+	newAddress2.city = "China";
+	newAddress2.street = "Mua Mo Street";
+    newAddress2.hauseNr = 22;
+  	transComp1.companyAddress = newAddress2;
+  
+    await transCompReg.add(transComp1);       
+
+  	// adding transportation company 2
+    const transComp2 = await factory.newResource(namespace, 'TransportationCompany', "3");
+    transComp2.companyName = "Shipping Inc.";
+    transComp2.GHG = 150;
+    const newAddress3 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress3.country = "Sydney";
+	newAddress3.city = "Australia";
+	newAddress3.street = "Beecon Str";
+    newAddress3.hauseNr = 122;
+  	transComp2.companyAddress = newAddress3;
+
+    await transCompReg.add(transComp2);       
+
+    // adding transportation company 3
+    const transComp3 = await factory.newResource(namespace, 'TransportationCompany', "4");
+    transComp3.companyName = "Fast Train Transport";
+    transComp3.GHG = 80;
+    const newAddress4 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress4.country = "Italy";
+	newAddress4.city = "Venice";
+	newAddress4.street = "Via Margutta";
+    newAddress4.hauseNr = 8;
+  	transComp3.companyAddress = newAddress4;
+
+    await transCompReg.add(transComp3);       
+  
+  	// adding sales company 
+    const salesCompReg = await getParticipantRegistry(namespace + '.SalesCompany');   
+    const salesComp = await factory.newResource(namespace, 'SalesCompany', "5");
+    salesComp.companyName = "Sales Co.";
+    salesComp.GHG = 30;
+    const newAddress5 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress5.country = "Hungary";
+	newAddress5.city = "Budapest";
+	newAddress5.street = "Bartok Bela ut";
+    newAddress5.hauseNr = 44;
+  	salesComp.companyAddress = newAddress5;
+  
+    await salesCompReg.add(salesComp);         
+}
 
 /**
  *

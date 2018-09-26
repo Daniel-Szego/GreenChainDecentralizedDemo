@@ -32,6 +32,7 @@ abstract asset GHGcarrierAsset identified by assetId {
   o String assetId
   o AssetStatus assetStatus
   o Double aggregatedGHG
+  --> GHGproducerCompany atCompany
 }
 
 abstract asset PhisicalAsset extends GHGcarrierAsset {

@@ -6,7 +6,7 @@ const namespace = "org.supplychain.green.model";
 
 /**
  *
- * @param {org.bicyclesharing.model.InitTestData} param - model instance
+ * @param {org.supplychain.green.model.InitTestData} param - model instance
  * @transaction
  */
 async function InitTestDataFunction(param) {  
@@ -86,33 +86,6 @@ async function InitTestDataFunction(param) {
 
 /**
  *
- * @param {org.bicyclesharing.model.ClearData} param - model instance
- * @transaction
- */
-async function ClearDataFunction(param) {  
-    console.log('clearing all data');
-  
-    const userParticipantRegistry = await getParticipantRegistry(namespace + '.User');
-    let users = await userParticipantRegistry.getAll();
-    await userParticipantRegistry.removeAll(users);
-    
-    const assetParticipantRegistry = await getParticipantRegistry(namespace + '.AssetOwner'); 
-    let assetParticipants = await assetParticipantRegistry.getAll();
-    await assetParticipantRegistry.removeAll(assetParticipants);
- 
-    const bycicleAssetRegistry = await getAssetRegistry(namespace + '.Bycicle'); 
-    let bycicles = await bycicleAssetRegistry.getAll();
-    await bycicleAssetRegistry.removeAll(bycicles);
-
-    const bikeAssetRegistry = await getAssetRegistry(namespace + '.Bike'); 
-    let bikes = await bikeAssetRegistry.getAll();
-    await bikeAssetRegistry.removeAll(bikes);
-
-    console.log('clearing all data finished');  
-}
-
-/**
- *
  * @param {org.supplychain.green.model.ClearData} param - model instance
  * @transaction
  */
@@ -146,41 +119,75 @@ async function ClearDataFunction(param) {
 
 /**
  *
- * @param {org.bicyclesharing.model.NeedRepair} param - model instance
+ * @param {org.supplychain.green.model.Transfer} param - model instance
  * @transaction
  */
-async function NeedRepairFunction(param) {  
-	    console.log('Bicycle needing a repair');
+async function TransferFunction(param) {  
+	let assetToTransfer = param.assetToTransfer;
+    let fromCompany = param.fromCompany;
+    let toCompany = param.toCompany;
+ 	
+  	assetToTransfer.atCompany = toCompany;
+    assetToTransfer.aggregatedGHG = assetToTransfer.aggregatedGHG + toCompany.GHG;     	
+  	
+    const cellPhoneReg = await getAssetRegistry(namespace + '.GHGcarrierAsset'); 
+    await cellPhoneReg.update(assetToTransfer);    
+  
+  	// emitting Transfer event
+    let factory = await getFactory();
 
-    let bycicleToRepair = param.BycicleToRepair;
-    
-  	if (bycicleToRepair.AssetSate == "GOOD"){
-      	bycicleToRepair.AssetSate = "IMPAIRED";
-      	bycicleToRepair.AssetAvailability = "NOT_AVAILABLE";
-            	
-        const bycicleAssetRegistry = await getAssetRegistry(namespace + '.Bycicle'); 
-      	await bycicleAssetRegistry.update(bycicleToRepair);  
-    }
+    let transferEvent = factory.newEvent('org.supplychain.green.model', 'AssetTransferred');
+  	transferEvent.gHGcarrierAsset = assetToTransfer;
+  	transferEvent.transferGHG = assetToTransfer.aggregatedGHG;
+    await emit(transferEvent);  	
 }
 
 /**
  *
- * @param {org.bicyclesharing.model.Repaired} param - model instance
+ * @param {org.supplychain.green.model.Produce} param - model instance
  * @transaction
  */
-async function RepairedFunction(param) {  
-		console.log('Repaired');
+async function ProduceFunction(param) {  
+	let manCompany = param.manufacturerCompany;
+    let factory = await getFactory();
 
-    let bycicleToRepair = param.BycicleToRepair;
-    
-  	if (bycicleToRepair.AssetSate == "IMPAIRED"){
-      	bycicleToRepair.AssetSate = "GOOD";
-      	bycicleToRepair.AssetAvailability = "FREE";
-            	
-        const bycicleAssetRegistry = await getAssetRegistry(namespace + '.Bycicle'); 
-      	await bycicleAssetRegistry.update(bycicleToRepair);  
-    }
+    // creating cell phone
+    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone');   
+    const newCellPhone = await factory.newResource(namespace, 'CellPhone', "1");
+    newCellPhone.assetStatus = "CREATED";
+    newCellPhone.aggregatedGHG = manCompany.GHG;
+    newCellPhone.atCompany = manCompany;
+    newCellPhone.cellPhoneType = "LENOVO";
+    newCellPhone.amount = 1;
+    await cellPhoneReg.add(newCellPhone);       
   
-  
-	
+  	// emitting create event
+
+    let createEvent = factory.newEvent('org.supplychain.green.model', 'AssetCreated');
+  	createEvent.gHGcarrierAsset = newCellPhone;
+  	createEvent.creationGHG = newCellPhone.aggregatedGHG;
+    await emit(createEvent);  	
 }
+
+/**
+ *
+ * @param {org.supplychain.green.model.Sell} param - model instance
+ * @transaction
+ */
+async function SellFunction(param) {  
+	let assetToTransfer = param.assetToTransfer;
+    let factory = await getFactory();
+ 	
+  	assetToTransfer.assetStatus = "SOLD";
+  	
+    const cellPhoneReg = await getAssetRegistry(namespace + '.GHGcarrierAsset'); 
+    await cellPhoneReg.update(assetToTransfer);    
+  
+  	// emitting Sold event
+
+    let soldEvent = factory.newEvent('org.supplychain.green.model', 'AssetSold');
+  	soldEvent.gHGcarrierAsset = assetToTransfer;
+  	soldEvent.sellingGHG = assetToTransfer.aggregatedGHG;
+    await emit(soldEvent);  	
+}
+

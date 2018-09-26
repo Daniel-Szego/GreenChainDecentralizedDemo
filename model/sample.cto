@@ -48,7 +48,7 @@ enum CellPhoneType {
   o XIAOMI
 }
 
-asset cellPhone extends PhisicalAsset {
+asset CellPhone extends PhisicalAsset {
   o CellPhoneType cellPhoneType
 }
 

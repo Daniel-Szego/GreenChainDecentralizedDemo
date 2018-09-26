@@ -113,28 +113,35 @@ async function ClearDataFunction(param) {
 
 /**
  *
- * @param {org.bicyclesharing.model.HireBycicle} param - model instance
+ * @param {org.supplychain.green.model.ClearData} param - model instance
  * @transaction
  */
-async function HireBycicleFunction(param) {  
-    console.log('Hiring a Bycicle');
- 	
-    let bycicleToHire = param.BycicleToHire;
-    let hireByMe = param.HireByMe;
+async function ClearDataFunction(param) {  
+    console.log('clearing test data');
+
+    // deleting assets
+    const cellPhoneRegistry = await getAssetRegistry(namespace + '.CellPhone'); 
+    let cellPhones = await cellPhoneRegistry.getAll();
+    await cellPhoneRegistry.removeAll(cellPhones);
+  
+  	// deleting participants
+    const manCompRegistry = await getParticipantRegistry(namespace + '.ManufacturerCompany');
+    let manCompanies = await manCompRegistry.getAll();
+    await manCompRegistry.removeAll(manCompanies);
     
-  	if (bycicleToHire.AssetAvailability == "FREE"){
-      	bycicleToHire.AssetAvailability = "HIRED";
-        bycicleToHire.HiredBy = hireByMe;
-      	
-        const bycicleAssetRegistry = await getAssetRegistry(namespace + '.Bycicle'); 
-      	await bycicleAssetRegistry.update(bycicleToHire);  
-       
-       // raising hiring event
-     let HiringEvent  = await getFactory().newEvent(namespace, 'BycicleHiredEvent'); 
-       HiringEvent.BycicleName = bycicleToHire.ObjectName;
-       HiringEvent.HiringPersonName = hireByMe.UserName;     
-      emit(HiringEvent);
-    }
+    const salesCompRegistry = await getParticipantRegistry(namespace + '.SalesCompany'); 
+    let salesCompanies = await salesCompRegistry.getAll();
+    await salesCompRegistry.removeAll(salesCompanies);
+  
+    const relayCompRegistry = await getParticipantRegistry(namespace + '.RelayCompany'); 
+    let relayCompanies = await relayCompRegistry.getAll();
+    await relayCompRegistry.removeAll(relayCompanies);
+
+    const trCompRegistry = await getParticipantRegistry(namespace + '.TransportationCompany'); 
+    let trCompanies = await trCompRegistry.getAll();
+    await trCompRegistry.removeAll(trCompanies);
+  
+    console.log('clearing all data finished');  
 }
 
 /**

@@ -108,6 +108,7 @@ transaction Produce {
 }
 
 transaction Sell {
+  --> GHGcarrierAsset assetToSell  
   --> SalesCompany salesCompany
 }
 

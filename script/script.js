@@ -130,7 +130,7 @@ async function TransferFunction(param) {
   	assetToTransfer.atCompany = toCompany;
     assetToTransfer.aggregatedGHG = assetToTransfer.aggregatedGHG + toCompany.GHG;     	
   	
-    const cellPhoneReg = await getAssetRegistry(namespace + '.GHGcarrierAsset'); 
+    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone'); 
     await cellPhoneReg.update(assetToTransfer);    
   
   	// emitting Transfer event
@@ -175,12 +175,12 @@ async function ProduceFunction(param) {
  * @transaction
  */
 async function SellFunction(param) {  
-	let assetToTransfer = param.assetToTransfer;
+	let assetToTransfer = param.assetToSell;
     let factory = await getFactory();
  	
   	assetToTransfer.assetStatus = "SOLD";
   	
-    const cellPhoneReg = await getAssetRegistry(namespace + '.GHGcarrierAsset'); 
+    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone'); 
     await cellPhoneReg.update(assetToTransfer);    
   
   	// emitting Sold event

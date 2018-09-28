@@ -150,10 +150,20 @@ async function TransferFunction(param) {
 async function ProduceFunction(param) {  
 	let manCompany = param.manufacturerCompany;
     let factory = await getFactory();
-
+  
     // creating cell phone
     const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone');   
-    const newCellPhone = await factory.newResource(namespace, 'CellPhone', "1");
+
+    // getting next id
+    let existingPhones = await cellPhoneReg.getAll();
+  	let numberOfPhones = 0;
+  
+    await existingPhones.forEach(function (phone) {
+      numberOfPhones ++;
+    });
+ 	numberOfPhones ++; 	
+
+    const newCellPhone = await factory.newResource(namespace, 'CellPhone', numberOfPhones.toString());
     newCellPhone.assetStatus = "CREATED";
     newCellPhone.aggregatedGHG = manCompany.GHG;
     newCellPhone.atCompany = manCompany;
@@ -190,4 +200,3 @@ async function SellFunction(param) {
   	soldEvent.sellingGHG = assetToTransfer.aggregatedGHG;
     await emit(soldEvent);  	
 }
-

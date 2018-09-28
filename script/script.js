@@ -42,39 +42,11 @@ async function InitTestDataFunction(param) {
 	newAddress2.street = "Mua Mo Street";
     newAddress2.hauseNr = 22;
   	transComp1.companyAddress = newAddress2;
+    transComp1.transportFrom = new Array();
+    transComp1.transportFrom.push(manComp);
   
     await transCompReg.add(transComp1);       
-
-  	// adding transportation company 2
-    console.log('Creating a transportation company 2');  
-
-    const transComp2 = await factory.newResource(namespace, 'TransportationCompany', "3");
-    transComp2.companyName = "Shipping Inc.";
-    transComp2.GHG = 150;
-    const newAddress3 = await factory.newConcept(namespace, 'CompanyAddress');
-	newAddress3.country = "Sydney";
-	newAddress3.city = "Australia";
-	newAddress3.street = "Beecon Str";
-    newAddress3.hauseNr = 122;
-  	transComp2.companyAddress = newAddress3;
-
-    await transCompReg.add(transComp2);       
-
-    // adding transportation company 3
-    console.log('Creating a transportation company 3');  
-
-    const transComp3 = await factory.newResource(namespace, 'TransportationCompany', "4");
-    transComp3.companyName = "Fast Train Transport";
-    transComp3.GHG = 80;
-    const newAddress4 = await factory.newConcept(namespace, 'CompanyAddress');
-	newAddress4.country = "Italy";
-	newAddress4.city = "Venice";
-	newAddress4.street = "Via Margutta";
-    newAddress4.hauseNr = 8;
-  	transComp3.companyAddress = newAddress4;
-
-    await transCompReg.add(transComp3);       
-
+  
     // adding relay company 1
     console.log('Creating a relay company 1');  
 
@@ -92,6 +64,23 @@ async function InitTestDataFunction(param) {
     await relayCompReg.add(relayComp1);       
 
   
+  	// adding transportation company 2
+    console.log('Creating a transportation company 2');  
+
+    const transComp2 = await factory.newResource(namespace, 'TransportationCompany', "3");
+    transComp2.companyName = "Shipping Inc.";
+    transComp2.GHG = 150;
+    const newAddress3 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress3.country = "Sydney";
+	newAddress3.city = "Australia";
+	newAddress3.street = "Beecon Str";
+    newAddress3.hauseNr = 122;
+  	transComp2.companyAddress = newAddress3;
+    transComp2.transportFrom = new Array();
+    transComp2.transportFrom.push(relayComp1);  
+  
+    await transCompReg.add(transComp2);       
+
     // adding relay company 2
     console.log('Creating a relay company 2');  
 
@@ -103,11 +92,28 @@ async function InitTestDataFunction(param) {
 	newAddress6.city = "Triest";
 	newAddress6.street = "Via Rue";
     newAddress6.hauseNr = 44;
-  	relayComp2.companyAddress = newAddress4;
+  	relayComp2.companyAddress = newAddress6;
 
     await relayCompReg.add(relayComp2);       
 
   
+    // adding transportation company 3
+    console.log('Creating a transportation company 3');  
+
+    const transComp3 = await factory.newResource(namespace, 'TransportationCompany', "4");
+    transComp3.companyName = "Fast Train Transport";
+    transComp3.GHG = 80;
+    const newAddress4 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress4.country = "Italy";
+	newAddress4.city = "Venice";
+	newAddress4.street = "Via Margutta";
+    newAddress4.hauseNr = 8;
+  	transComp3.companyAddress = newAddress4;
+    transComp3.transportFrom = new Array();
+    transComp3.transportFrom.push(relayComp2);
+
+    await transCompReg.add(transComp3);       
+ 
   	// adding sales company 
     console.log('Creating a Sales company 1');  
 

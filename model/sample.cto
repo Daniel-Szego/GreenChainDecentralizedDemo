@@ -84,7 +84,7 @@ participant RelayCompany extends GHGproducerCompany {
 }
 
 participant TransportationCompany extends GHGproducerCompany {
-
+  --> GHGproducerCompany[] transportFrom
 }
 
 /**

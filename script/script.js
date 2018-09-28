@@ -30,6 +30,8 @@ async function InitTestDataFunction(param) {
     await manCompReg.add(manComp);       
 
   	// adding transportation company 1
+    console.log('Creating a transportation company 1');  
+
     const transCompReg = await getParticipantRegistry(namespace + '.TransportationCompany');   
     const transComp1 = await factory.newResource(namespace, 'TransportationCompany', "2");
     transComp1.companyName = "Truck Transport Inc.";
@@ -44,6 +46,8 @@ async function InitTestDataFunction(param) {
     await transCompReg.add(transComp1);       
 
   	// adding transportation company 2
+    console.log('Creating a transportation company 2');  
+
     const transComp2 = await factory.newResource(namespace, 'TransportationCompany', "3");
     transComp2.companyName = "Shipping Inc.";
     transComp2.GHG = 150;
@@ -57,6 +61,8 @@ async function InitTestDataFunction(param) {
     await transCompReg.add(transComp2);       
 
     // adding transportation company 3
+    console.log('Creating a transportation company 3');  
+
     const transComp3 = await factory.newResource(namespace, 'TransportationCompany', "4");
     transComp3.companyName = "Fast Train Transport";
     transComp3.GHG = 80;
@@ -68,18 +74,53 @@ async function InitTestDataFunction(param) {
   	transComp3.companyAddress = newAddress4;
 
     await transCompReg.add(transComp3);       
+
+    // adding relay company 1
+    console.log('Creating a relay company 1');  
+
+    const relayCompReg = await getParticipantRegistry(namespace + '.RelayCompany');   
+    const relayComp1 = await factory.newResource(namespace, 'RelayCompany', "5");
+    relayComp1.companyName = "Harbour";
+    relayComp1.GHG = 120;
+    const newAddress5 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress5.country = "China";
+	newAddress5.city = "Hong Kong";
+	newAddress5.street = "Seeside";
+    newAddress5.hauseNr = 4;
+  	relayComp1.companyAddress = newAddress5;
+
+    await relayCompReg.add(relayComp1);       
+
+  
+    // adding relay company 2
+    console.log('Creating a relay company 2');  
+
+    const relayComp2 = await factory.newResource(namespace, 'RelayCompany', "6");
+    relayComp2.companyName = "Harbour";
+    relayComp2.GHG = 120;
+    const newAddress6 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress6.country = "Italy";
+	newAddress6.city = "Triest";
+	newAddress6.street = "Via Rue";
+    newAddress6.hauseNr = 44;
+  	relayComp2.companyAddress = newAddress4;
+
+    await relayCompReg.add(relayComp2);       
+
   
   	// adding sales company 
+    console.log('Creating a Sales company 1');  
+
     const salesCompReg = await getParticipantRegistry(namespace + '.SalesCompany');   
     const salesComp = await factory.newResource(namespace, 'SalesCompany', "5");
     salesComp.companyName = "Sales Co.";
     salesComp.GHG = 30;
-    const newAddress5 = await factory.newConcept(namespace, 'CompanyAddress');
-	newAddress5.country = "Hungary";
-	newAddress5.city = "Budapest";
-	newAddress5.street = "Bartok Bela ut";
-    newAddress5.hauseNr = 44;
-  	salesComp.companyAddress = newAddress5;
+    const newAddress7 = await factory.newConcept(namespace, 'CompanyAddress');
+	newAddress7.country = "Hungary";
+	newAddress7.city = "Budapest";
+	newAddress7.street = "Bartok Bela ut";
+    newAddress7.hauseNr = 44;
+  	salesComp.companyAddress = newAddress7;
   
     await salesCompReg.add(salesComp);         
 }

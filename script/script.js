@@ -173,9 +173,24 @@ async function TransferFunction(param) {
 	let assetToTransfer = param.assetToTransfer;
     let fromCompany = param.fromCompany;
     let toCompany = param.toCompany;
- 	
+  
+  	// checking if transfer is valid
+    
+    if(toCompany.transportFrom) {
+      	let isValidTransfer = false;
+	    await toCompany.transportFrom.forEach(function (company) {
+			if(company == fromCompany)
+            {
+              	isValidTransfer = true;
+            }
+        });
+  		if(isValidTransfer == false) {
+        	throw new Error('Invalid transfer');
+        }  
+    }
+    	
   	assetToTransfer.atCompany = toCompany;
-    assetToTransfer.aggregatedGHG = assetToTransfer.aggregatedGHG + toCompany.GHG;     	
+    assetToTransfer.aggregatedGHG = assetToTransfer.aggregatedGHG + toCompany.GHG;     	  assetToTransfer.assetStatus = "ON_THE_ROAD";
   	
     const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone'); 
     await cellPhoneReg.update(assetToTransfer);    

@@ -10,6 +10,10 @@ const namespace = "org.supplychain.green.model";
  * @transaction
  */
 async function InitTestDataFunction(param) {  
+  
+      const ghgBsaeLineInfo = await request.get( { uri:'https://iaspub.epa.gov/enviro/efservice/tri_facility/state_abbr/VA/rows/102:102/JSON', json: true});
+    const baseline = parseInt(ghgBsaeLineInfo[0].PREF_QA_CODE) / 10;
+
     console.log('init test data');
 
     console.log('Creating a manufacturer company');  
@@ -19,7 +23,7 @@ async function InitTestDataFunction(param) {
     const manCompReg = await getParticipantRegistry(namespace + '.ManufacturerCompany');   
     const manComp = await factory.newResource(namespace, 'ManufacturerCompany', "1");
     manComp.companyName = "Cell phone Manufacturer Inc.";
-    manComp.GHG = 100;
+    manComp.GHG = baseline;
     const newAddress = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress.country = "Bejing";
 	newAddress.city = "China";
@@ -35,7 +39,7 @@ async function InitTestDataFunction(param) {
     const transCompReg = await getParticipantRegistry(namespace + '.TransportationCompany');   
     const transComp1 = await factory.newResource(namespace, 'TransportationCompany', "2");
     transComp1.companyName = "Truck Transport Inc.";
-    transComp1.GHG = 50;
+    transComp1.GHG = baseline / 2;
     const newAddress2 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress2.country = "Hong Kong";
 	newAddress2.city = "China";
@@ -53,7 +57,7 @@ async function InitTestDataFunction(param) {
     const relayCompReg = await getParticipantRegistry(namespace + '.RelayCompany');   
     const relayComp1 = await factory.newResource(namespace, 'RelayCompany', "5");
     relayComp1.companyName = "Harbour";
-    relayComp1.GHG = 120;
+    relayComp1.GHG = baseline / 1.75;
     const newAddress5 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress5.country = "China";
 	newAddress5.city = "Hong Kong";
@@ -69,7 +73,7 @@ async function InitTestDataFunction(param) {
 
     const transComp2 = await factory.newResource(namespace, 'TransportationCompany', "3");
     transComp2.companyName = "Shipping Inc.";
-    transComp2.GHG = 150;
+    transComp2.GHG = baseline * 1.5;
     const newAddress3 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress3.country = "Sydney";
 	newAddress3.city = "Australia";
@@ -86,7 +90,7 @@ async function InitTestDataFunction(param) {
 
     const relayComp2 = await factory.newResource(namespace, 'RelayCompany', "6");
     relayComp2.companyName = "Harbour";
-    relayComp2.GHG = 120;
+    relayComp2.GHG = baseline * 1.25;
     const newAddress6 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress6.country = "Italy";
 	newAddress6.city = "Triest";
@@ -102,7 +106,7 @@ async function InitTestDataFunction(param) {
 
     const transComp3 = await factory.newResource(namespace, 'TransportationCompany', "4");
     transComp3.companyName = "Fast Train Transport";
-    transComp3.GHG = 80;
+    transComp3.GHG = baseline * 0.8;
     const newAddress4 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress4.country = "Italy";
 	newAddress4.city = "Venice";
@@ -120,7 +124,7 @@ async function InitTestDataFunction(param) {
     const salesCompReg = await getParticipantRegistry(namespace + '.SalesCompany');   
     const salesComp = await factory.newResource(namespace, 'SalesCompany', "5");
     salesComp.companyName = "Sales Co.";
-    salesComp.GHG = 30;
+    salesComp.GHG = baseline * 0.4;
     const newAddress7 = await factory.newConcept(namespace, 'CompanyAddress');
 	newAddress7.country = "Hungary";
 	newAddress7.city = "Budapest";

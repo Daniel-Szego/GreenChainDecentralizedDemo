@@ -15,12 +15,13 @@
 /**
  * Example access control list for the green supply chain.
  */
-rule EverybodyCanDOEverything {
-    description: "Allow all participants can do everything"
-    participant: "**"
-    operation: ALL
-    resource: "**"
-    action: ALLOW
+
+rule ManufacturerCompanyCanNotManageParticipants {
+    description: "Members of the GasFieldState roles can not manage participants"
+    participant: "org.supplychain.green.model.ManufacturerCompany"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGproducerCompany"
+    action: DENY
 }
 
 rule ManufacturerCanOnlyCreate {
@@ -28,6 +29,14 @@ rule ManufacturerCanOnlyCreate {
     participant: "org.supplychain.green.model.ManufacturerCompany"
     operation: UPDATE, DELETE
     resource: "org.supplychain.green.model.GHGcarrierAsset"
+    action: DENY
+}
+
+rule TransportationCompanyCanNotManageParticipants {
+    description: "Members of the GasFieldState roles can not manage participants"
+    participant: "org.supplychain.green.model.TransportationCompany"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGproducerCompany"
     action: DENY
 }
 
@@ -39,6 +48,14 @@ rule TransportationCanOnlyUpdate {
     action: DENY
 }
 
+rule RelayCompanyCanNotManageParticipants {
+    description: "Members of the RelayCompany roles can not manage participants"
+    participant: "org.supplychain.green.model.RelayCompany"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGproducerCompany"
+    action: DENY
+}
+
 rule RelayCompanyCanOnlyUpdate {
     description: "Members of the relay company roles can only update and read an asset"
     participant: "org.supplychain.green.model.RelayCompany"
@@ -47,12 +64,28 @@ rule RelayCompanyCanOnlyUpdate {
     action: DENY
 }
 
+rule SalesCompanyCanNotManageParticipants {
+    description: "Members of the RelayCompany roles can not manage participants"
+    participant: "org.supplychain.green.model.SalesCompany"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGproducerCompany"
+    action: DENY
+}
+
 rule SalesCanNotDelete {
     description: "Members of the sales company roles can not delete"
-    participant: "org.supplychain.green.model.RelayCompany"
+    participant: "org.supplychain.green.model.SalesCompany"
     operation: UPDATE, DELETE
     resource: "org.supplychain.green.model.GHGcarrierAsset"
     action: DENY
+}
+
+rule EverybodyCanDOEverything {
+    description: "Allow all participants can do everything"
+    participant: "**"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
 }
 
 

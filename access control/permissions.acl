@@ -13,7 +13,7 @@
  */
 
 /**
- * Sample access control list.
+ * Example access control list for the green supply chain.
  */
 rule EverybodyCanDOEverything {
     description: "Allow all participants can do everything"
@@ -22,4 +22,39 @@ rule EverybodyCanDOEverything {
     resource: "**"
     action: ALLOW
 }
+
+rule ManufacturerCanOnlyCreate {
+    description: "Members of the manufacturing roles can only create and read asset"
+    participant: "org.supplychain.green.model.ManufacturerCompany"
+    operation: UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGcarrierAsset"
+    action: DENY
+}
+
+rule TransportationCanOnlyUpdate {
+    description: "Members of the transportation roles can only update and read an asset"
+    participant: "org.supplychain.green.model.TransportationCompany"
+    operation: UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGcarrierAsset"
+    action: DENY
+}
+
+rule RelayCompanyCanOnlyUpdate {
+    description: "Members of the relay company roles can only update and read an asset"
+    participant: "org.supplychain.green.model.RelayCompany"
+    operation: UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGcarrierAsset"
+    action: DENY
+}
+
+rule SalesCanNotDelete {
+    description: "Members of the sales company roles can not delete"
+    participant: "org.supplychain.green.model.RelayCompany"
+    operation: UPDATE, DELETE
+    resource: "org.supplychain.green.model.GHGcarrierAsset"
+    action: DENY
+}
+
+
+
 

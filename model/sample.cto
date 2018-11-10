@@ -13,120 +13,84 @@
  */
 
 /**
- * Experiental implementation of a green supply chain.
+ * Simple decentralized exchange protocol
  */
 
-namespace org.supplychain.green.model
+namespace org.simpledex
 
 /**
  * ASSETS
  */
 
-enum AssetStatus {
-  o CREATED 
-  o ON_THE_ROAD
-  o SOLD
+enum OrderStatus {
+  o INITIATED
+  o OFFERED
+  o CLOSED
 }
 
-abstract asset GHGcarrierAsset identified by assetId {
+abstract asset AssetAncestor identified by assetId {
   o String assetId
-  o AssetStatus assetStatus
-  o Double aggregatedGHG
-  --> GHGproducerCompany atCompany
 }
 
-abstract asset PhisicalAsset extends GHGcarrierAsset {
+abstract asset OrderAncestor identified by orderId {
+  o String orderId
   o Double amount
+  o String assetType
+  o Boolean buyOrSell 
+  o OrderStatus orderStatus
 }
 
-abstract asset LiquidAsset extends GHGcarrierAsset {
-  o Double amount
-}
-
-enum CellPhoneType {
-  o LENOVO
-  o ZTE
-  o XIAOMI
-}
-
-asset CellPhone extends PhisicalAsset {
-  o CellPhoneType cellPhoneType
+asset Order extends OrderAncestor { 
 }
 
 /**
  * PARTICIPANTS
  */
 
-concept CompanyAddress {
-  o String country
-  o String city optional
-  o String street optional
-  o Integer hauseNr optional
+abstract participant DEXAncestor identified by dexId {
+  o String dexId
+  --> Order[] orders
 }
 
-abstract participant GHGproducerCompany identified by participantId {
-  o String participantId
-  o String companyName
-  o CompanyAddress companyAddress
-  o Double GHG 
-}
-
-participant ManufacturerCompany extends GHGproducerCompany {
-  
-}
-
-participant SalesCompany extends GHGproducerCompany {
-  
-}
-
-participant RelayCompany extends GHGproducerCompany {
-  
-}
-
-participant TransportationCompany extends GHGproducerCompany {
-  --> GHGproducerCompany[] transportFrom
+participant DEX extends DEXAncestor {
 }
 
 /**
- * TRANSACTION
+ * TRANSACTIONS
  */
 
-transaction InitTestData {
+transaction CreateDEX {  
 }
 
 transaction ClearData {
 }
 
-transaction Transfer {
-  --> GHGcarrierAsset assetToTransfer
-  --> GHGproducerCompany fromCompany
-  --> GHGproducerCompany toCompany
+transaction CreateAndPlaceOrder {
+    --> DEX dex 
+    o Double amount
+    o String assetType
+    o Boolean buyOrSell
 }
 
-transaction Produce {
-  --> ManufacturerCompany manufacturerCompany
-}
-
-transaction Sell {
-  --> GHGcarrierAsset assetToSell  
-  --> SalesCompany salesCompany
+transaction PlaceOrder {
+  --> Order order
+  --> DEX dex 
 }
 
 /**
  * EVENTS
  */
 
-event AssetCreated {
-  --> GHGcarrierAsset gHGcarrierAsset
-  o Double creationGHG
+event OrderPlacedEvent {
+  --> Order order
+  --> DEX dex
 }
 
-event AssetTransferred {
-  --> GHGcarrierAsset gHGcarrierAsset
-  o Double transferGHG
+event MatchingEvent {
+  --> Order[] orders
+  --> DEX dex
 }
 
-event AssetSold {
-  --> GHGcarrierAsset gHGcarrierAsset
-  o Double sellingGHG
-}
+
+
+
